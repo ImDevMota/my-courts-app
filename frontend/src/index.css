@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 13% 9%;
+    --foreground: 210 40% 98%;
+
+    --card: 224 20% 12%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 224 20% 12%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 25 95% 53%;
+    --primary-foreground: 220 13% 9%;
+
+    --secondary: 220 13% 18%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 220 13% 18%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 25 95% 53%;
+    --accent-foreground: 220 13% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 18%;
+    --input: 220 13% 18%;
+    --ring: 25 95% 53%;
+
+    --radius: 0.75rem;
+
+    /* Basketball themed custom variables */
+    --court-gradient: linear-gradient(135deg, hsl(25 95% 53%) 0%, hsl(20 90% 48%) 100%);
+    --court-glow: 0 0 20px hsl(25 95% 53% / 0.3);
+    --hover-glow: 0 0 30px hsl(25 95% 53% / 0.5);
+    --card-shadow: 0 8px 32px hsl(220 13% 4% / 0.3);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    /* Remove dark mode overrides since we're using dark theme by default */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

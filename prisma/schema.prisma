@@ -1,0 +1,48 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Usuario {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  email     String    @unique
+  senhaHash String
+  avatarUrl String?
+  criadoEm  DateTime  @default(now())
+  agendamentos UsuariosAgendamentos[]
+}
+
+model Quadra {
+  id          Int       @id @default(autoincrement())
+  nome        String
+  localizacao String?
+  imagemUrl   String?
+  criadoEm    DateTime  @default(now())
+  agendamentos Agendamento[]
+}
+
+model Agendamento {
+  id            Int       @id @default(autoincrement())
+  quadraId      Int
+  horarioInicio DateTime
+  horarioFim    DateTime
+  criadoEm      DateTime  @default(now())
+  quadra        Quadra    @relation(fields: [quadraId], references: [id])
+  usuarios      UsuariosAgendamentos[]
+}
+
+model UsuariosAgendamentos {
+  usuarioId     Int
+  agendamentoId Int
+  confirmado    Boolean   @default(true)
+
+  usuario       Usuario    @relation(fields: [usuarioId], references: [id])
+  agendamento   Agendamento @relation(fields: [agendamentoId], references: [id])
+
+  @@id([usuarioId, agendamentoId])
+}
