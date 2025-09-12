@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,110 +10,63 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Users, Clock, CheckCircle } from "lucide-react";
-import court1 from "@/assets/court-1.jpg";
-import court2 from "@/assets/court-2.jpg";
-
-// Mock data - will be replaced with Supabase data
-const mockCourts = [
-  {
-    id: 1,
-    name: "Quadra Street Ball",
-    address: "Rua das Palmeiras, 123 - Centro",
-    image: court1,
-    schedules: [
-      {
-        time: "18:00",
-        participants: 8,
-        maxParticipants: 10,
-        userJoined: false,
-      },
-      { time: "19:00", participants: 6, maxParticipants: 10, userJoined: true },
-      {
-        time: "20:00",
-        participants: 4,
-        maxParticipants: 10,
-        userJoined: false,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Quadra Elite Sports",
-    address: "Av. dos Esportes, 456 - Vila Nova",
-    image: court2,
-    schedules: [
-      {
-        time: "17:00",
-        participants: 10,
-        maxParticipants: 10,
-        userJoined: false,
-      },
-      {
-        time: "18:00",
-        participants: 7,
-        maxParticipants: 10,
-        userJoined: false,
-      },
-      {
-        time: "19:00",
-        participants: 9,
-        maxParticipants: 10,
-        userJoined: false,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Quadra Champions",
-    address: "Rua do Basquete, 789 - Jardim América",
-    image: court1,
-    schedules: [
-      {
-        time: "16:00",
-        participants: 5,
-        maxParticipants: 10,
-        userJoined: false,
-      },
-      {
-        time: "17:00",
-        participants: 8,
-        maxParticipants: 10,
-        userJoined: false,
-      },
-      {
-        time: "18:00",
-        participants: 6,
-        maxParticipants: 10,
-        userJoined: false,
-      },
-    ],
-  },
-];
+import axios from "axios";
 
 export default function Dashboard() {
-  const [courts, setCourts] = useState(mockCourts);
+  const [courts, setCourts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleJoinCourt = (courtId: number, timeSlot: string) => {
-    setCourts((prevCourts) =>
-      prevCourts.map((court) =>
-        court.id === courtId
-          ? {
-              ...court,
-              schedules: court.schedules.map((schedule) =>
-                schedule.time === timeSlot
-                  ? {
-                      ...schedule,
-                      participants: schedule.userJoined
-                        ? schedule.participants - 1
-                        : schedule.participants + 1,
-                      userJoined: !schedule.userJoined,
-                    }
-                  : schedule
-              ),
-            }
-          : court
-      )
-    );
+  // Função para buscar os dados do back-end
+  useEffect(() => {
+    async function fetchCourts() {
+      try {
+        const response = await axios.get("http://localhost:3000/dashboard");
+        setCourts(response.data); // Atualiza o estado com os dados do back-end
+      } catch (err) {
+        setError("Erro ao carregar as quadras. Tente novamente mais tarde.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCourts();
+  }, []);
+
+  // Ver como trazer e usar os dados do usuário logado
+  const handleJoinCourt = async (courtId, timeSlot) => {
+    try {
+      await axios.post("http://localhost:3000/confirmacao", {
+        courtId,
+        timeSlot,
+        userId: mockUser.email, // ou id do usuário real
+      });
+
+      setCourts((prevCourts) =>
+        prevCourts.map((court) =>
+          court.id === courtId
+            ? {
+                ...court,
+                schedules: court.schedules.map((schedule) =>
+                  schedule.time === timeSlot
+                    ? {
+                        ...schedule,
+                        participants: schedule.userJoined
+                          ? schedule.participants - 1
+                          : schedule.participants + 1,
+                        userJoined: !schedule.userJoined,
+                      }
+                    : schedule
+                ),
+              }
+            : court
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao confirmar presença:", error);
+      alert("Não foi possível confirmar presença. Tente novamente.");
+    }
   };
 
   // Mock user data
@@ -122,6 +75,9 @@ export default function Dashboard() {
     email: "mota@mail.com",
     avatar: undefined,
   };
+
+  // if (loading) return <p>Carregando...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="min-h-screen bg-background">

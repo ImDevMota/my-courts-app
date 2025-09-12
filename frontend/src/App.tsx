@@ -9,6 +9,7 @@ import Cadastro from "./pages/Cadastro";
 import Dashboard from "./pages/Dashboard";
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
+import { ToastContainer } from "react-toastify";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

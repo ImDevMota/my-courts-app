@@ -15,6 +15,7 @@ model Usuario {
   avatarUrl String?
   criadoEm  DateTime  @default(now())
   agendamentos UsuariosAgendamentos[]
+  role     String  @default("user")
 }
 
 model Quadra {

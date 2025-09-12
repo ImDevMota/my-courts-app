@@ -3,8 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Header } from "@/components/Header";
+import api from "../../services/api.js";
+import { toast } from "react-toastify";
 
 export default function Cadastro() {
   const [name, setName] = useState("");
@@ -13,24 +21,40 @@ export default function Cadastro() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       alert("As senhas não coincidem!");
       return;
     }
-    // For now, just navigate to dashboard - authentication will be added with Supabase
-    navigate("/dashboard");
+
+    try {
+      await api.post("/cadastro", {
+        name,
+        email,
+        password,
+      });
+
+      toast.success("Usuário cadastrado com sucesso!");
+
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+      toast.error("Não foi possível cadastrar o usuário!");
+    }
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <div className="flex items-center justify-center py-12 px-4">
         <Card className="w-full max-w-md shadow-card-shadow border-border bg-card">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Cadastrar na MyCourts</CardTitle>
+            <CardTitle className="text-2xl text-center">
+              Cadastrar na MyCourts
+            </CardTitle>
             <CardDescription className="text-center text-muted-foreground">
               Crie sua conta para começar a usar as quadras
             </CardDescription>
@@ -85,14 +109,14 @@ export default function Cadastro() {
                   className="bg-input border-border focus:ring-ring"
                 />
               </div>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full bg-court-gradient hover:shadow-hover-glow transition-all duration-300"
               >
                 Cadastrar
               </Button>
             </form>
-            
+
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
                 Já tem uma conta?{" "}

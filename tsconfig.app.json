@@ -26,5 +26,5 @@
       "@/*": ["frontend/src/*"]
     }
   },
-  "include": ["frontend/src"]
+  "include": ["frontend/src", "frontend/services"]
 }
