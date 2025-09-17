@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,24 +14,29 @@ import { Header } from "@/components/Header";
 import { toast } from "react-toastify";
 import api from "../../services/api.js";
 
+interface LoginResponse {
+  token: string;
+  role: "admin" | "user" | string;
+}
+
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const { data: token, role } = await api.post("/login", {
+      const { data } = await api.post<LoginResponse>("/login", {
         email: email,
         password: password,
       });
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", data.token);
       toast.success("Login realizado com sucesso!");
 
-      if (role == "admin") {
+      if (data.role == "admin") {
         navigate("/admin");
       } else {
         navigate("/dashboard");
