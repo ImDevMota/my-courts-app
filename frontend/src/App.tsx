@@ -10,10 +10,11 @@ import Dashboard from "./pages/Dashboard";
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
 import { ToastContainer } from "react-toastify";
+import type { FC } from "react";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App: FC = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />

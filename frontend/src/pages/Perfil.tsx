@@ -15,20 +15,35 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Camera, MapPin, Clock, Users } from "lucide-react";
 
+interface MockUser {
+  name: string;
+  email: string;
+  avatar?: string; // opcional
+}
+
+interface UserScheduledCourts {
+  id: number;
+  courtName: string;
+  address: string;
+  time: string; // não tenho certeza total se isso vai funcionar
+  date: string;
+  participants: number;
+}
+
 export default function Perfil() {
-  const [name, setName] = useState("Mota");
-  const [email, setEmail] = useState("mota@email.com");
-  const [phone, setPhone] = useState("(11) 99999-9999");
+  const [name, setName] = useState<string>("Mota");
+  const [email, setEmail] = useState<string>("mota@email.com");
+  const [phone, setPhone] = useState<string>("(11) 99999-9999");
 
   // Mock user data
-  const mockUser = {
+  const mockUser: MockUser = {
     name: "Mota",
     email: "mota@email.com",
     avatar: undefined,
   };
 
   // Mock user's scheduled courts
-  const userScheduledCourts = [
+  const userScheduledCourts: UserScheduledCourts[] = [
     {
       id: 1,
       courtName: "Quadra Street Ball",
@@ -47,7 +62,7 @@ export default function Perfil() {
     },
   ];
 
-  const handleUpdateProfile = (e: React.FormEvent) => {
+  const handleUpdateProfile = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Profile update logic will be implemented with Supabase
     alert("Perfil atualizado com sucesso!");

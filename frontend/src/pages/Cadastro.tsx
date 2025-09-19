@@ -14,23 +14,29 @@ import { Header } from "@/components/Header";
 import api from "../../services/api.js";
 import { toast } from "react-toastify";
 
+interface RegisterResponse {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export default function Cadastro() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      alert("As senhas não coincidem!");
+      toast.error("As senhas não coincidem!");
       return;
     }
 
     try {
-      await api.post("/cadastro", {
+      (await api.post)<RegisterResponse>("/cadastro", {
         name,
         email,
         password,
