@@ -37,13 +37,19 @@ model Agendamento {
   usuarios      UsuariosAgendamentos[]
 }
 
-model UsuariosAgendamentos {
-  usuarioId     Int
-  agendamentoId Int
-  confirmado    Boolean   @default(true)
+enum TipoParticipacao {
+  JOGADOR
+  ESPECTADOR
+}
 
-  usuario       Usuario    @relation(fields: [usuarioId], references: [id])
-  agendamento   Agendamento @relation(fields: [agendamentoId], references: [id])
+model UsuariosAgendamentos {
+  usuarioId        Int
+  agendamentoId    Int
+  confirmado       Boolean          @default(true)
+  tipoParticipacao TipoParticipacao @default(JOGADOR)
+
+  usuario          Usuario          @relation(fields: [usuarioId], references: [id])
+  agendamento      Agendamento      @relation(fields: [agendamentoId], references: [id])
 
   @@id([usuarioId, agendamentoId])
 }

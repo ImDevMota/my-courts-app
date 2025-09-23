@@ -23,7 +23,6 @@ router.post("/cadastro", async (req, res) => {
         .json({ message: "E-mail já cadastrado no servidor." });
     }
 
-    // Criar tabela no DB Postgree
     const userDB = await prisma.usuario.create({
       data: {
         nome: user.name,
