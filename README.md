@@ -72,9 +72,3 @@ Criar uma plataforma completa que **organize jogos, torneios e reservas de quadr
 ## Contribuição  
 O projeto ainda está em fase de desenvolvimento — sugestões e contribuições são muito bem-vindas!  
 
----
-
-## Licença  
-Este projeto está sob a licença **MIT** – livre para uso, modificação e distribuição com os devidos créditos.  
-
----
